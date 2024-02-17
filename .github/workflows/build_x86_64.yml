@@ -7,6 +7,7 @@ on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
     branches: [ master ]
+  workflow_dispatch:
 
 env:
   ANDROID_ABI: x86_64
@@ -31,7 +32,7 @@ jobs:
         run: |
           sudo apt -yqq update
           sudo apt install -yqq aria2
-      
+
       - name: Download Android NDK
         id: download_ndk
         run: |
@@ -60,7 +61,7 @@ jobs:
           tar -zcvf OpenSSL_${{env.OPENSSL_VERSION}}_${{env.ANDROID_ABI}}.tar.gz openssl_${{env.OPENSSL_VERSION}}_${{env.ANDROID_ABI}}
           echo "::set-output name=release_tag::${{env.OPENSSL_VERSION}}"
           echo "::set-output name=status::success"
-      
+
       - name: Upload firmware to release
         if: steps.tag.outputs.status == 'success' && !cancelled()
         uses: softprops/action-gh-release@v1
